@@ -181,11 +181,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         # Remove password_confirm from validated_data
         validated_data.pop('password_confirm', None)
         
-        # Create user
+        # Create user (UserProfile will be created automatically by signal)
         user: User = User.objects.create_user(**validated_data)
-        
-        # Create user profile
-        UserProfile.objects.create(user=user)
         
         return user
 

@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(true);
 
-  const API_BASE_URL = 'http://localhost:8000/api';
+  const API_BASE_URL = 'http://127.0.0.1:8000/api';
 
   // Check authentication status on mount
   useEffect(() => {
@@ -104,6 +104,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (userData) => {
+    console.log('Register function called with data:', userData); // Debug line
+    console.log('API URL:', `${API_BASE_URL}/auth/register/`); // Debug line
+    console.log('Request body:', JSON.stringify(userData, null, 2)); // Debug line
     try {
       const response = await fetch(`${API_BASE_URL}/auth/register/`, {
         method: 'POST',
@@ -114,7 +117,10 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify(userData),
       });
 
+      console.log('Response status:', response.status); // Debug line
       const data = await response.json();
+      console.log('Response data:', data); // Debug line
+      console.log('Response data details:', JSON.stringify(data, null, 2)); // More detailed logging
 
       if (response.ok && data.success) {
         setUser(data.user);
@@ -126,7 +132,7 @@ export const AuthProvider = ({ children }) => {
         return { success: false, message: data.message || 'Registration failed' };
       }
     } catch (error) {
-      console.error('Registration error:', error);
+      console.error('Registration error:', error); // Debug line
       return { success: false, message: 'Network error occurred' };
     }
   };

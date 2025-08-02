@@ -165,6 +165,7 @@ class RegisterView(APIView):
         Returns:
             Response with registration status
         """
+        print(f"Registration request data: {request.data}")  # Debug line
         serializer: RegisterSerializer = RegisterSerializer(
             data=request.data,
             context={'request': request}
@@ -191,6 +192,7 @@ class RegisterView(APIView):
                 'token': token.key,
             }, status=status.HTTP_201_CREATED)
         else:
+            print(f"Registration validation errors: {serializer.errors}")  # Debug line
             return Response({
                 'success': False,
                 'message': 'Registration failed',
