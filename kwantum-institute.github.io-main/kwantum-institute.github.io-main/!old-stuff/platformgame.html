@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article: My Java Game</title>
+    <style>
+        /* Basic reset and styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        header, footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1em;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        section {
+            margin: 20px 0;
+            padding: 0 20px;
+        }
+
+        section h2 {
+            border-bottom: 2px solid #333;
+            padding-bottom: 5px;
+        }
+
+        section p {
+            line-height: 1.6;
+        }
+
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+
+        /* Button styles */
+        .download-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Layout for images and sections */
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .content img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .content .text {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .content-left {
+            justify-content: flex-start;
+        }
+
+        .content-right {
+            justify-content: flex-end;
+        }
+
+        .content img.left {
+            margin-right: 20px;
+        }
+
+        .content img.right {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>My Java Game: A Journey into Game Development</h1>
+    </header>
+
+    <section id="introduction">
+        <h2>Introduction</h2>
+        <p><strong>NOTE:</strong> This article will be updated whenever I make modifications to my game. The game repository can be found <a href="link-to-your-game-repository">here</a>.</p>
+        <p>Recently, I stumbled upon a tutorial that was about how to create a platformer game (basically, a game where you avoid obstacles and defeat enemies to complete certain levels) in Java. Although Java is not the best language to create video games with (since C++ and C# are more widely used), it's still useful for the sake of this project (see <a href="link-to-games-made-with-java">here</a> for some examples of games made with Java).</p>
+        <p>The tutorial that I used to create this game can be found <a href="link-to-tutorial">here</a>. In my opinion, episode #15 can be skipped since it's more of a visual design thing and doesn't really deal with the video game mechanics. Currently, I am using the same sprite designs in the video, but I will eventually switch to my own sprite designs (I still haven't figured out which software to use for this kind of graphic design).</p>
+    </section>
+
+    <section id="prerequisites">
+        <h2>Prerequisites</h2>
+        <div class="content content-left">
+            <img src="link-to-your-image" alt="Image for Prerequisites" class="left">
+            <div class="text">
+                <p>Before I did anything, I had to make sure Java was installed on my laptop. Although you can download it online, I highly suggest installing Java with a package manager such as Homebrew or Chocolatey as this will make the process easier (I'll write about this someday). If you decide to follow the given tutorial, make sure that you get the latest version of Java since there will be some slight syntax differences between the versions.</p>
+                <p>Aside from that, installing an IDE (integrated development environment) was a must. Either Visual Studio Code or Eclipse (the IDE specifically for Java) should suffice, but VScode has some slight differences that I found out when I started this project (which I'll mention later).</p>
+                <p>Although this is not a must, I would recommend understanding the fundamentals of Java/computer programming, which includes stuff such as variable declaration, conditionals (if, else if, else), iterations (while and for loops), creating classes/object-oriented programming, try/catch error handling, and arrays. These aren't too difficult and can be learnt quickly, but it is perfectly fine to learn these coding concepts along the way.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="my-thoughts">
+        <h2>My Thoughts</h2>
+        <div class="content content-right">
+            <div class="text">
+                <p>Overall, this experience was fruitful and helped me learn more about Java programming/coding logic in general. Additionally, it taught me how to debug programs in a more systematic way. Instead of asking AI to solve every single coding problem I had (which I used to do before it got way too difficult), I am now able to deduce where an error might potentially be in my code. For example, if the space bar suddenly did not elicit a response on the game screen, I simply checked the player class to make sure that everything was running smoothly.</p>
+                <p>One problem you might encounter if you use Visual Studio Code is image uploading. Whereas the video recommends using a res (resource) folder if you only use Eclipse, I recommend creating a res folder as well as a separate images folder in the src (source) folder, as shown on the right.</p>
+            </div>
+            <img src="link-to-your-image" alt="Image for My Thoughts" class="right">
+        </div>
+    </section>
+
+    <section id="tips-while-coding">
+        <h2>Tips while coding</h2>
+        <div class="content content-left">
+            <img src="link-to-your-image" alt="Image for Tips while Coding" class="left">
+            <div class="text">
+                <ul>
+                    <li>Be sure to understand the logic and how the code connects with one another - this is especially useful while debugging.</li>
+                    <li>Since Java is an object-oriented programming language, remember to master the fundamentals of OOP (especially since enums pop up).</li>
+                    <li>Use comments to highlight important sections and remind yourself about the logic behind the program.</li>
+                    <li>Don't give up! Even if it gets hard, remember that it is not impossible and that every solution is solvable!</li>
+                    <li>It's OK to use AI for assistance, but be wary of the tips it provides and always try to understand the code first.</li>
+                    <li>Finally, be creative and have fun!</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="download">
+        <h2>Download</h2>
+        <p>At the end of the article, you can download the JAR file for my game by clicking the button below:</p>
+        <a href="/static/PlatformGameProject.jar" download="PlatformGameProject.jar" class="download-button">Download PlatformGameProject.jar</a>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Your Name. All rights reserved.</p>
+    </footer>
+</body>
+</html>

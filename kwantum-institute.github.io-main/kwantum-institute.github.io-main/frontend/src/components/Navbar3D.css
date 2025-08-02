@@ -1,0 +1,130 @@
+:root {
+  --nav-color: #242424;
+  --nav-hover-color: #bfdbfe6e;
+  --text-3d-color: #ffffff;
+  --3d-effect-color: #242424;
+  --skew-degree: -15deg;
+}
+.mirror {
+  transform: scale(-1, -1);
+}
+.text-3d-left {
+  transform: skewY(var(--skew-degree));
+  font-weight: 900;
+  display: block;
+  color: var(--text-3d-color);
+  text-shadow: -1px -1px 0 var(--3d-effect-color),
+    -2px -2px 0 var(--3d-effect-color), -3px -3px 0 var(--3d-effect-color),
+    -4px -4px 0 var(--3d-effect-color), -5px -5px 0 var(--3d-effect-color),
+    -6px -6px 0 var(--3d-effect-color), -7px -7px 0 var(--3d-effect-color),
+    -8px -8px 0 var(--3d-effect-color), -9px -9px 0 var(--3d-effect-color),
+    -10px -10px 0 var(--3d-effect-color), -11px -11px 0 var(--3d-effect-color),
+    -12px -12px 0 var(--3d-effect-color), -13px -13px 0 var(--3d-effect-color),
+    -14px -14px 0 var(--3d-effect-color), -15px -15px 0 var(--3d-effect-color),
+    -16px -16px 0 var(--3d-effect-color), -17px -17px 0 var(--3d-effect-color),
+    -18px -18px 0 var(--3d-effect-color), -19px -19px 0 var(--3d-effect-color),
+    -20px -20px 0 var(--3d-effect-color);
+  transition: all 0.1s;
+}
+.text-3d-right {
+  transform: skewY(calc(var(--skew-degree) * -1));
+  font-weight: 900;
+  display: block;
+  color: var(--text-3d-color);
+  text-shadow: -1px -1px 0 var(--3d-effect-color),
+    2px -2px 0 var(--3d-effect-color), 3px -3px 0 var(--3d-effect-color),
+    4px -4px 0 var(--3d-effect-color), 5px -5px 0 var(--3d-effect-color),
+    6px -6px 0 var(--3d-effect-color), 7px -7px 0 var(--3d-effect-color),
+    8px -8px 0 var(--3d-effect-color), 9px -9px 0 var(--3d-effect-color),
+    10px -10px 0 var(--3d-effect-color), 11px -11px 0 var(--3d-effect-color),
+    12px -12px 0 var(--3d-effect-color), 13px -13px 0 var(--3d-effect-color),
+    14px -14px 0 var(--3d-effect-color), 15px -15px 0 var(--3d-effect-color),
+    16px -16px 0 var(--3d-effect-color), 17px -17px 0 var(--3d-effect-color),
+    18px -18px 0 var(--3d-effect-color), 19px -19px 0 var(--3d-effect-color),
+    20px -20px 0 var(--3d-effect-color);
+  transition: all 0.1s;
+}
+.text-3d-s {
+  transform: skewY(var(--skew-degree));
+  font-weight: 900;
+  display: block;
+  color: var(--text-3d-color);
+  text-shadow: -1px -1px 0 var(--3d-effect-color),
+    -2px -2px 0 var(--3d-effect-color), -3px -3px 0 var(--3d-effect-color),
+    -4px -4px 0 var(--3d-effect-color), -5px -5px 0 var(--3d-effect-color),
+    -6px -6px 0 var(--3d-effect-color), -7px -7px 0 var(--3d-effect-color),
+    -8px -8px 0 var(--3d-effect-color);
+  transition: all 0.1s;
+}
+.navbar-3d {
+  transform: skewY(calc(var(--skew-degree) * -1)) translateX(-20px);
+}
+@media (min-width: 1024px) {
+  .navbar-3d {
+    transform: skewY(calc(var(--skew-degree) * -1)) translateX(-135px)
+      translateY(50px);
+  }
+}
+.navbar-3d li {
+  font-weight: 900;
+  color: var(--text-3d-color);
+  border: 0;
+  border-width: 0;
+  border-style: none;
+  border-color: transparent;
+  position: relative;
+  list-style-type: none;
+  width: 210px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background: var(--nav-color);
+  z-index: calc(1 * var(--i));
+  transition: 0.5s;
+  background-size: 8px 8px;
+}
+.navbar-3d li:hover {
+  background: var(--nav-hover-color);
+  transform: translate(-10px, 10px);
+  background-size: 8px 8px;
+  text-shadow: 1px 0px 23px rgba(0, 0, 0, 1);
+}
+.navbar-3d li:before {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 40px;
+  height: 100%;
+  background: var(--nav-color);
+  filter: brightness(0.7);
+  transform-origin: right;
+  transform: skewY(-45deg);
+  transition: 0.5s;
+}
+.navbar-3d li:hover::before {
+  background: var(--nav-hover-color);
+}
+.navbar-3d li::after {
+  content: attr(data-text);
+  position: absolute;
+  top: -40px;
+  right: 0;
+  width: calc(100%);
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  font-weight: 600;
+  font-size: 1.5em;
+  background: var(--nav-color);
+  filter: brightness(0.9);
+  transform-origin: bottom;
+  transform: skewX(-45deg);
+  transition: 0.5s;
+  text-transform: uppercase;
+}
+.navbar-3d li:hover::after {
+  background: var(--nav-hover-color);
+}

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kwantum Institute</title>
+    <style>
+        /* Basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        /* Navbar styles */
+        #navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+            z-index: 1000; /* Ensure navbar is above other content */
+        }
+        #navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+            display: inline-block;
+            padding: 10px 15px;
+        }
+        #navbar a:hover {
+            text-decoration: underline;
+        }
+        /* Dropdown styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #04004c;
+            min-width: 160px;
+            z-index: 1;
+            text-align: left; /* Align dropdown content to the left */
+        }
+        .dropdown-content a {
+            color: #fff;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color:  #04004c;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        /* Center dropdown items */
+        .dropdown-content {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        /* Welcome section styles */
+        #introduction-section {
+            height: 100vh; /* Height equal to viewport height */
+            background-image: url('https://storage.needpix.com/rsynced_images/space-view-of-earth-lights.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+            padding: 20px;
+        }
+        #introduction-section h1 {
+            font-size: 80px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        #introduction-section p {
+            font-size: 15px;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+        /* Projects section styles */
+        #projects {
+            padding: 50px 0;
+            background-color: #e0e0e0;
+            text-align: center;
+        }
+        #projects h2 {
+            font-size: 40px;
+            margin-bottom: 30px;
+        }
+        .project-tile {
+            display: inline-block;
+            background-color: #fff;
+            width: 200px;
+            height: 200px;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .project-tile:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        /* Contact message and button styles */
+        #contact-message {
+            background-color: #070090;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+        #contact-button {
+            background-color: #008CBA;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #contact-button:hover {
+            background-color: #005f7f;
+        }
+        /* Media query for responsiveness */
+        @media (max-width: 768px) {
+            /* Adjust styles for smaller screens */
+            #introduction-section h1 {
+                font-size: 60px;
+            }
+            #introduction-section p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Contact Message and Button -->
+    <div id="contact-message">
+        <p>Want to contribute? Contact us!</p>
+        <a href="mailto:kwanstitute@gmail.com" id="contact-button">Contact Us</a>
+    </div>
+
+    <!-- Navbar -->
+    <nav id="navbar">
+        <div class="dropdown">
+            <a href="#introduction-section">Home</a>
+            <div class="dropdown-content">
+                <a href="#">About Us</a>
+                <a href="#">Our Staff</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="#">Educational Blogs</a>
+            <div class="dropdown-content">
+                <a href="#">Physics</a>
+                <a href="#">Computer Science</a>
+                <a href="#">Technology</a>
+                <a href="#">Black Hole Database</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="#">Nutshell Knowledge</a>
+            <div class="dropdown-content">
+                <a href="#">Physics</a>
+                <a href="#">Maths</a>
+                <a href="#">Neuroscience</a>
+                <a href="#">Art</a>
+                <a href="#">Biology</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="#projects">History Celebration</a>
+            <div class="dropdown-content">
+                <a href="#">Physics Nobel Prize</a>
+                <a href="#">Hume</a>
+            </div>
+        </div>
+        <a href="https://github.com/Kwantum-institute" id="profile-link">GitHub Profile</a>
+        <!-- Placeholder links -->
+        <a href="#">Link</a>
+    </nav>
+
+    <!-- Introduction Section -->
+    <section id="introduction-section">
+        <h1>Kwantum Institute</h1>
+        <p>Curate a Course for Curiosity.</p>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <h2>Our Top Picks Of the Day</h2>
+        <div class="project-tile">
+            <a href="python-vs-java.html">
+                <h3>Technical Documentation - Java vs Python</h3>
+                <p>Documentation comparing Java and Python programming languages.</p>
+            </a>
+        </div>
+        <!-- RPG Game -->
+        <div class="project-tile">
+            <a href="rpg_game.html">
+                <h3>RPG - Dragon Repeller</h3>
+                <p>An interactive RPG game where you must defeat the dragon preventing people from leaving the town.</p>
+            </a>
+        </div>
+        <!-- Platform Game -->
+        <div class="project-tile">
+            <a href="platformgame.html">
+                <h3>Java Platform Game Project</h3>
+                <p>An interactive platform game where you must avoid obstacles.</p>
+            </a>
+        </div>
+    </section>
+</body>
+</html>

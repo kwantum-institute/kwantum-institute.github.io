@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+body {
+  font-family: Helvetica;
+}
+.button {
+  background-color: black;
+  color: white;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  width: max-content;
+  border-radius: 9999px;
+}
+.bg {
+  position: absolute;
+  animation: belt 30s linear infinite;
+  width: 100%;
+  height: 100%;
+  background-size: 2100px;
+  background-image: url(./assets/earth_background.jpg);
+  z-index: -10;
+}
+@media (max-width: 1023px) {
+  .hidden-on-sm {
+    display: none !important;
+  }
+}
+
+@keyframes belt {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}
+
+.blog {
+  display: flex;
+  flex-direction: column;
+  column-gap: 0.5rem;
+}
+.blog div {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background-color: black;
+}
+
+.blog a {
+  font-size: 2rem;
+  font-weight: 900;
+  display: block;
+  transition: all 0.1s;
+}
+
+.text-3d {
+  text-shadow: -1px -1px 0 var(--3d-effect-color),
+    -2px -2px 0 var(--3d-effect-color), -3px -3px 0 var(--3d-effect-color),
+    -4px -4px 0 var(--3d-effect-color), -5px -5px 0 var(--3d-effect-color),
+    -6px -6px 0 var(--3d-effect-color), -7px -7px 0 var(--3d-effect-color),
+    -8px -8px 0 var(--3d-effect-color);
+}

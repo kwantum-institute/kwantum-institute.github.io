@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Documentation - Java vs Python</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            margin: 0; /* Removed default margin */
+            align-items: flex-start; /* Align items to the left */
+        }
+
+        #navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%; /* Fill the entire viewport width */
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        #navbar header {
+            font-size: 1.5em;
+            margin-bottom: 0.5em;
+            text-align: left; /* Align header to the left */
+        }
+
+        .nav-link {
+            display: inline-block; /* Keep inline-block for layout */
+            color: white;
+            text-decoration: none;
+            margin: 5px; /* Adjust margin */
+            padding: 5px 10px; /* Adjust padding */
+            text-align: left; /* Align text to the left */
+        }
+
+        .nav-link:hover {
+            background-color: #575757;
+        }
+
+        #main-doc {
+            margin-top: 60px; /* Adjusted margin to push the content below the navbar */
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .main-section {
+            margin-bottom: 20px;
+        }
+
+        .main-section header {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            text-align: left; /* Align section headers to the left */
+            padding-left: 0; /* Remove any left padding */
+        }
+
+        code {
+            display: block;
+            background-color: #f4f4f4;
+            padding: 10px;
+            margin: 10px 0;
+            border-left: 3px solid #333;
+        }
+
+        ul {
+            margin: 10px 0;
+            padding: 0;
+            list-style-type: disc;
+        }
+
+        .toc {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Align TOC items to the left */
+            padding-left: 20px; /* Add some padding to align to the content */
+            margin-bottom: 10px; /* Minimize space between TOC and first heading */
+        }
+
+        .toc a {
+            display: block;
+            color: black;
+            text-decoration: none;
+            margin: 3px 0; /* Minimize space between TOC items */
+            padding: 5px 10px;
+        }
+
+        .toc a:hover {
+            background-color: #575757;
+            color: white;
+        }
+
+        header {
+            text-align: left; /* Align main title to the left */
+            font-size: 50px; /* Set font size to 50px */
+            margin: 20px 0;
+            padding-left: 20px; /* Add padding to align to the content */
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            #navbar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            #main-doc {
+                margin-top: 10px; /* Adjusted margin for smaller screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>Java vs Python Documentation</header>
+    <div class="toc">
+        <a href="#Hello,_World!">Hello, World!</a>
+        <a href="#Variables">Variables</a>
+        <a href="#Data_Types">Data Types</a>
+        <a href="#If-Else_Statements">If-Else Statements</a>
+        <a href="#Loops">Loops</a>
+        <a href="#Classes">Classes</a>
+        <a href="#Arrays">Arrays</a>
+        <a href="#Algorithms">Algorithms</a>
+        <a href="#Inheritance">Inheritance</a>
+        <a href="#Recursion">Recursion</a>
+    </div>
+    
+    <!-- Main Content -->
+    <main id="main-doc">
+        <section class="main-section" id="Hello,_World!">
+            <header>Hello, World!</header>
+            <p>The "Hello, World!" program is often the first program written when learning a new language. In Java, this involves creating a class and defining the main method, where you use `System.out.println` to print the string to the console. The syntax requires the use of curly braces and semicolons, which makes the structure more formal and verbose.</p>
+            <code>public class Main {<br> &nbsp;&nbsp;public static void main(String[] args) {<br> &nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Hello, World!");<br> &nbsp;&nbsp;}<br>}</code>
+            <p>In contrast, Python simplifies this process significantly. You can print "Hello, World!" with a single line of code using the `print` function. This simplicity and ease of use make Python more approachable for beginners.</p>
+            <code>print("Hello, World!")</code>
+        </section>
+
+        <section class="main-section" id="Variables">
+            <header>Variables</header>
+            <p>Variables in programming are used to store data values. Java is a statically typed language, meaning that you must declare the type of variable before using it. For example, to store the number 5, you would write `int number = 5;`. This explicit declaration helps catch errors at compile time and can make the code more predictable.</p>
+            <code>int number = 5;</code>
+            <p>Python, on the other hand, is dynamically typed, so you do not need to declare the type of a variable explicitly. You can simply write `number = 5`, and Python will infer that it is an integer. This flexibility makes Python faster to write and easier to read, although it can sometimes lead to runtime errors that would be caught at compile time in Java.</p>
+            <code>number = 5</code>
+        </section>
+
+        <section class="main-section" id="Data_Types">
+            <header>Data Types</header>
+            <p>Both Java and Python support a variety of data types, though they handle them differently. In Java, data types are divided into primitive types (such as int, float, double, boolean, char) and objects. Primitive types are not objects and are therefore more efficient in terms of memory usage and performance. Examples of Java primitive types include:</p>
+            <ul>
+                <li>int</li>
+                <li>float</li>
+                <li>double</li>
+                <li>boolean</li>
+                <li>char</li>
+            </ul>
+            <p>In Python, however, everything is treated as an object. This includes basic data types such as int, float, bool, and str, as well as more complex types like lists, tuples, and dictionaries. This object-oriented nature of Python provides greater flexibility and powerful built-in methods for data manipulation, although it may come at the cost of some performance compared to Java's primitive types.</p>
+            <code>int, float, bool, str, list, tuple, dict, etc.</code>
+        </section>
+
+        <section class="main-section" id="If-Else_Statements">
+            <header>If-Else Statements</header>
+            <p>Conditional statements allow a program to execute different code paths based on certain conditions. In Java, an if-else statement is enclosed in curly braces, and each condition must be followed by parentheses and a semicolon. For example, to check if a number is positive, you would write `if (x > 0) { System.out.println("Positive"); } else { System.out.println("Negative"); }`. This structure is clear but requires more syntax elements.</p>
+            <code>if (x > 0) {<br> &nbsp;&nbsp;System.out.println("Positive");<br>} else {<br> &nbsp;&nbsp;System.out.println("Negative");<br>}</code>
+            <p>In Python, if-else statements rely on indentation to define the scope of each condition, which results in a more streamlined and readable syntax. You can check if a number is positive with the following code: `if x > 0: print("Positive") else: print("Negative")`. This indentation-based approach reduces the need for additional characters and makes the code easier to read at a glance.</p>
+            <code>if x > 0:<br> &nbsp;&nbsp;print("Positive")<br>else:<br> &nbsp;&nbsp;print("Negative")</code>
+        </section>
+
+        <section class="main-section" id="Loops">
+            <header>Loops</header>
+            <p>Loops are fundamental in programming for iterating over a sequence of elements or executing a block of code multiple times. Java's for loop is more verbose, requiring explicit initialization, condition, and increment expressions within parentheses, followed by a block of code in curly braces. For example, `for (int i = 0; i < 5; i++) { System.out.println(i); }` iterates from 0 to 4, printing each value.</p>
+            <code>for (int i = 0; i < 5; i++) {<br> &nbsp;&nbsp;System.out.println(i);<br>}</code>
+            <p>Python's for loop is more concise and intuitive, using the `range` function to generate a sequence of numbers. The equivalent loop in Python would be `for i in range(5): print(i)`, which achieves the same result with fewer lines of code and no need for explicit initialization or incrementing.</p>
+            <code>for i in range(5):<br> &nbsp;&nbsp;print(i)</code>
+            <p>When it comes to while loops, Java again requires more syntax. A Java while loop, such as `int i = 0; while (i < 5) { System.out.println(i); i++; }`, uses explicit condition checking and incrementing within the loop body. Python's while loop simplifies this to `i = 0 while i < 5: print(i) i += 1`, maintaining readability and reducing the syntactic overhead.</p>
+            <code>int i = 0;<br>while (i < 5) {<br> &nbsp;&nbsp;System.out.println(i);<br> &nbsp;&nbsp;i++;<br>}</code>
+            <code>i = 0<br>while i < 5:<br> &nbsp;&nbsp;print(i)<br> &nbsp;&nbsp;i += 1</code>
+        </section>
+
+        <section class="main-section" id="Classes">
+            <header>Classes</header>
+            <p>Both Java and Python support object-oriented programming through the use of classes. In Java, a class definition includes access modifiers (such as public or private), methods, and member variables. For example, a simple class definition might look like `public class Dog { String breed; public void bark() { System.out.println("Woof"); } }`. This structure enforces encapsulation and helps manage access to the class's methods and properties.</p>
+            <code>public class Dog {<br> &nbsp;&nbsp;String breed;<br> &nbsp;&nbsp;public void bark() {<br> &nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Woof");<br> &nbsp;&nbsp;}<br>}</code>
+            <p>In Python, defining a class is more straightforward. A class is defined using the `class` keyword, followed by methods that take `self` as their first parameter to access instance variables. For example, `class Dog: def __init__(self, breed): self.breed = breed def bark(self): print("Woof")` achieves the same functionality with less boilerplate code. Python's class definitions are more concise and emphasize readability, which aligns with Python's overall design philosophy.</p>
+            <code>class Dog:<br> &nbsp;&nbsp;def __init__(self, breed):<br> &nbsp;&nbsp;&nbsp;&nbsp;self.breed = breed<br> &nbsp;&nbsp;def bark(self):<br> &nbsp;&nbsp;&nbsp;&nbsp;print("Woof")</code>
+        </section>
+
+        <section class="main-section" id="Arrays">
+            <header>Arrays</header>
+            <p>In Java, arrays are fixed-size data structures that hold elements of a single data type. They are declared with a specific size, such as `int[] numbers = new int[5];`, and accessed using indices. This strict typing and fixed size can make arrays efficient but less flexible for dynamic data manipulation.</p>
+            <code>int[] numbers = new int[5];</code>
+            <p>Python, in contrast, uses lists to provide a more flexible and dynamic alternative to arrays. Lists can hold elements of different data types and can be resized dynamically. For example, `numbers = [1, 2, 3, 4, 5]` creates a list with five elements, and you can add or remove elements easily. This flexibility makes lists a powerful tool for various data manipulation tasks, although they might not always be as performant as fixed-size arrays in Java.</p>
+            <code>numbers = [1, 2, 3, 4, 5]</code>
+        </section>
+
+        <section class="main-section" id="Algorithms">
+            <header>Algorithms</header>
+            <p>Implementing algorithms like selection sort and insertion sort highlights differences in syntax and approach between Java and Python. In Java, selection sort involves iterating through the array and swapping elements to sort the array in place. The code is verbose and requires explicit handling of indices and swaps, as shown in the following example:</p>
+            <code>void selectionSort(int[] arr) {<br> &nbsp;&nbsp;for (int i = 0; i < arr.length - 1; i++) {<br> &nbsp;&nbsp;&nbsp;&nbsp;int minIndex = i;<br> &nbsp;&nbsp;&nbsp;&nbsp;for (int j = i + 1; j < arr.length; j++) {<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (arr[j] < arr[minIndex]) {<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;minIndex = j;<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br> &nbsp;&nbsp;&nbsp;&nbsp;}<br> &nbsp;&nbsp;&nbsp;&nbsp;int temp = arr[minIndex];<br> &nbsp;&nbsp;&nbsp;&nbsp;arr[minIndex] = arr[i];<br> &nbsp;&nbsp;&nbsp;&nbsp;arr[i] = temp;<br> &nbsp;&nbsp;}<br>}</code>
+            <p>In Python, the same selection sort algorithm is implemented with simpler syntax and fewer lines of code. Python's list operations and dynamic typing make the code more readable and easier to understand:</p>
+            <code>def selection_sort(arr):<br> &nbsp;&nbsp;for i in range(len(arr)):<br> &nbsp;&nbsp;&nbsp;&nbsp;min_index = i<br> &nbsp;&nbsp;&nbsp;&nbsp;for j in range(i + 1, len(arr)):<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if arr[j] < arr[min_index]:<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;min_index = j<br> &nbsp;&nbsp;&nbsp;&nbsp;arr[i], arr[min_index] = arr[min_index], arr[i]</code>
+            <p>Insertion sort in Java requires explicit handling of the key and insertion logic within nested loops. The code can become complex due to the need for careful index management:</p>
+            <code>void insertionSort(int[] arr) {<br> &nbsp;&nbsp;for (int i = 1; i < arr.length; i++) {<br> &nbsp;&nbsp;&nbsp;&nbsp;int key = arr[i];<br> &nbsp;&nbsp;&nbsp;&nbsp;int j = i - 1;<br> &nbsp;&nbsp;&nbsp;&nbsp;while (j >= 0 && arr[j] > key) {<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arr[j + 1] = arr[j];<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;j--;<br> &nbsp;&nbsp;&nbsp;&nbsp;}<br> &nbsp;&nbsp;&nbsp;&nbsp;arr[j + 1] = key;<br> &nbsp;&nbsp;}<br>}</code>
+            <p>In Python, the insertion sort algorithm is more straightforward and concise. The use of dynamic typing and Python's built-in list operations reduces the complexity and makes the code easier to read:</p>
+            <code>def insertion_sort(arr):<br> &nbsp;&nbsp;for i in range(1, len(arr)):<br> &nbsp;&nbsp;&nbsp;&nbsp;key = arr[i]<br> &nbsp;&nbsp;&nbsp;&nbsp;j = i - 1<br> &nbsp;&nbsp;&nbsp;&nbsp;while j >= 0 and key < arr[j]:<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arr[j + 1] = arr[j]<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;j -= 1<br> &nbsp;&nbsp;&nbsp;&nbsp;arr[j + 1] = key</code>
+        </section>
+
+        <section class="main-section" id="Inheritance">
+            <header>Inheritance</header>
+            <p>Inheritance is a fundamental concept in object-oriented programming that allows a class to inherit properties and methods from another class. In Java, inheritance is implemented using the `extends` keyword. For example, a `Dog` class can extend an `Animal` class, inheriting its properties and methods. The syntax is explicit and requires defining the relationship between classes clearly:</p>
+            <code>class Animal {<br> &nbsp;&nbsp;void eat() {<br> &nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Eating");<br> &nbsp;&nbsp;}<br>}<br>class Dog extends Animal {<br> &nbsp;&nbsp;void bark() {<br> &nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Woof");<br> &nbsp;&nbsp;}<br>}</code>
+            <p>In Python, inheritance is achieved by passing the parent class as a parameter to the child class. The syntax is simpler and more intuitive, with less boilerplate code. For example, a `Dog` class can inherit from an `Animal` class using the following code:</p>
+            <code>class Animal:<br> &nbsp;&nbsp;def eat(self):<br> &nbsp;&nbsp;&nbsp;&nbsp;print("Eating")<br>class Dog(Animal):<br> &nbsp;&nbsp;def bark(self):<br> &nbsp;&nbsp;&nbsp;&nbsp;print("Woof")</code>
+        </section>
+
+        <section class="main-section" id="Recursion">
+            <header>Recursion</header>
+            <p>Recursion is a technique where a function calls itself to solve smaller instances of the same problem. In Java, recursion requires defining the function with explicit return types and using curly braces to denote the function body. For example, calculating the factorial of a number using recursion would look like this:</p>
+            <code>int factorial(int n) {<br> &nbsp;&nbsp;if (n == 1) return 1;<br> &nbsp;&nbsp;return n * factorial(n - 1);<br>}</code>
+            <p>In Python, recursion is more straightforward and relies on indentation to define the function body. The same factorial function in Python is simpler and easier to read:</p>
+            <code>def factorial(n):<br> &nbsp;&nbsp;if n == 1:<br> &nbsp;&nbsp;&nbsp;&nbsp;return 1<br> &nbsp;&nbsp;return n * factorial(n - 1)</code>
+        </section>
+    </main>
+</body>
+</html>
