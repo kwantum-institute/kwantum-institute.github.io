@@ -10,7 +10,7 @@ const Navbar3D = () => {
   ];
 
   return (
-    <div className="h-[600px] lg:h-[700px] mt-[145px] lg:mt-5 w-full flex flex-col relative justify-center items-center">
+    <div className="h-[600px] lg:h-[700px] mt-[100px] lg:mt-5 w-full flex flex-col relative justify-center items-center">
       <div className="relative lg:right-5 w-2/3 flex flex-col items-center">
         <Link
           to="/"
