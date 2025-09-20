@@ -9,22 +9,16 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js (if needed for build)
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20" # Specify your Node.js version
+      - name: Install dependencies
+        run: npm ci
+        working-directory: kwantum-institute.github.io-main/kwantum-institute.github.io-main/frontend
 
-      - name: Navigate to frontend directory
-        run: cd kwantum-institute.github.io-main/kwantum-institute.github.io-main/frontend/
-
-      - name: Install dependencies (if needed for build)
-        run: npm ci # Or yarn install
-
-      - name: Build project (if needed)
-        run: npm run build # Or your specific build command
+      - name: Build project
+        run: npm run build
+        working-directory: kwantum-institute.github.io-main/kwantum-institute.github.io-main/frontend
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
