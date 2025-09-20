@@ -17,6 +17,9 @@ jobs:
         with:
           node-version: "20" # Specify your Node.js version
 
+      - name: Navigate to frontend directory
+        run: cd kwantum-institute.github.io-main/kwantum-institute.github.io-main/frontend/
+
       - name: Install dependencies (if needed for build)
         run: npm ci # Or yarn install
 
