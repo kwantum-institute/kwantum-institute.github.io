@@ -30,4 +30,3 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: kwantum-institute.github.io-main/kwantum-institute.github.io-main/frontend/build
