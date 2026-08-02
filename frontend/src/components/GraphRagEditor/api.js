@@ -1,4 +1,6 @@
-const API_BASE = import.meta.env.VITE_GRAPHRAG_API_URL || "http://localhost:8000/api/graphrag";
+import { GRAPHRAG_API_URL } from "../../config";
+
+const API_BASE = GRAPHRAG_API_URL;
 
 async function apiFetch(path, options = {}) {
   const url = `${API_BASE}${path}`;
