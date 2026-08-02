@@ -5,6 +5,5 @@ from rest_framework import status
 class DataAPIView(APIView):
     def get(self, request):
         data = []
-# from backend....
-  ]
+        # from backend....
         return Response(data, status=status.HTTP_200_OK)
