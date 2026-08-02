@@ -9,6 +9,8 @@ import PhysicsNobelPrize from "./pages/history/PhysicsNobelPrize";
 import PythonVsJava from "./pages/nutshell/PythonVsJava";
 import NoPage from "./pages/NoPage";
 import Editor from "./pages/Editor";
+import GraphRagEditor from "./components/GraphRagEditor/GraphRagEditor";
+import ArchitectureDashboard from "./components/ArchitectureDashboard/ArchitectureDashboard";
 import "./App.css";
 
 function App() {
@@ -26,6 +28,8 @@ function App() {
         />
         <Route path="nutshell/python-vs-java" element={<PythonVsJava />} />
         <Route path="editor" element={<Editor />} />
+        <Route path="graphrag" element={<GraphRagEditor />} />
+        <Route path="architecture" element={<ArchitectureDashboard />} />
         <Route path="*" element={<NoPage />} />
       </Route>
     </Routes>
