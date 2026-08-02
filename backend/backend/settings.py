@@ -10,8 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-from pathlib import Path
 import os
+import secrets
+from pathlib import Path
+
+from django.core.exceptions import ImproperlyConfigured
 
 try:
     from decouple import config
@@ -20,6 +23,50 @@ except ImportError:  # pragma: no cover - fallback when python-decouple missing
         value = os.environ.get(key, default)
         return cast(value) if cast is not None and value != "" else value
 
+
+def _env_bool(name: str, *, default: bool) -> bool:
+    """Read a strict boolean from an environment variable.
+
+    Args:
+        name: Environment variable name.
+        default: Value to use when the variable is unset.
+
+    Returns:
+        The parsed boolean value.
+
+    Raises:
+        ImproperlyConfigured: If the value is not a recognized boolean.
+    """
+    raw_value = os.environ.get(name)
+    if raw_value is None:
+        return default
+
+    normalized = raw_value.strip().lower()
+    if normalized in {"1", "true", "yes", "on"}:
+        return True
+    if normalized in {"0", "false", "no", "off"}:
+        return False
+    raise ImproperlyConfigured(
+        f"{name} must be one of: true, false, 1, 0, yes, no, on, off"
+    )
+
+
+def _env_list(name: str, *, default: tuple[str, ...] = ()) -> list[str]:
+    """Read a comma-separated environment variable as a clean list.
+
+    Args:
+        name: Environment variable name.
+        default: Values to use when the variable is unset.
+
+    Returns:
+        Non-empty, whitespace-trimmed values.
+    """
+    raw_value = os.environ.get(name)
+    if raw_value is None:
+        return list(default)
+    return [item.strip() for item in raw_value.split(",") if item.strip()]
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,14 +74,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-e-2j*(m9w@i2zg9zjok%c)zd412ce-t(9$o1yl-=44-db2#5#@'
-
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = _env_bool("DEBUG", default=True)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.environ.get("SECRET_KEY", "").strip()
+if not SECRET_KEY:
+    if not DEBUG:
+        raise ImproperlyConfigured("SECRET_KEY is required when DEBUG is false")
+    # Local development only. Production must provide a stable environment secret.
+    SECRET_KEY = secrets.token_urlsafe(50)
 
+ALLOWED_HOSTS = _env_list(
+    "ALLOWED_HOSTS",
+    default=("localhost", "127.0.0.1", "0.0.0.0"),
+)
+if not ALLOWED_HOSTS:
+    raise ImproperlyConfigured("ALLOWED_HOSTS must contain at least one hostname")
 
 # Application definition
 
@@ -159,22 +215,31 @@ REST_FRAMEWORK = {
     ],
 }
 
-# CORS settings
-CORS_ALLOWED_ORIGINS = [
+# CORS settings. Production is same-origin by default; explicitly opt in any
+# separate frontend origins with a comma-separated CORS_ALLOWED_ORIGINS value.
+_LOCAL_CORS_ORIGINS = (
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:5176",
     "http://127.0.0.1:5176",
-]
+)
+CORS_ALLOWED_ORIGINS = _env_list(
+    "CORS_ALLOWED_ORIGINS",
+    default=_LOCAL_CORS_ORIGINS if DEBUG else (),
+)
 
 CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = _env_list("CSRF_TRUSTED_ORIGINS")
 
 # Session settings
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+SESSION_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SAMESITE = 'Lax'
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Email settings (for development)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

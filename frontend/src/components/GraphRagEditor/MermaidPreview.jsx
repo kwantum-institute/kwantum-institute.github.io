@@ -9,15 +9,20 @@ export default function MermaidPreview({ mermaidText }) {
   useEffect(() => {
     if (!containerRef.current || !mermaidText) return;
 
+    const container = containerRef.current;
     const id = `mermaid-${Math.random().toString(36).slice(2, 9)}`;
-    containerRef.current.innerHTML = "";
+    container.replaceChildren();
     const el = document.createElement("div");
     el.className = id;
     el.textContent = mermaidText;
-    containerRef.current.appendChild(el);
+    container.appendChild(el);
 
     mermaid.run({ querySelector: `.${id}` }).catch((err) => {
-      containerRef.current.innerHTML = `<pre class="text-red-500">${err.message}</pre>`;
+      const errorElement = document.createElement("pre");
+      errorElement.className = "text-red-500";
+      errorElement.textContent =
+        err instanceof Error ? err.message : "Unable to render diagram";
+      container.replaceChildren(errorElement);
     });
   }, [mermaidText]);
 
