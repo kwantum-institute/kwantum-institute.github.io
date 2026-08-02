@@ -13,6 +13,13 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os
 
+try:
+    from decouple import config
+except ImportError:  # pragma: no cover - fallback when python-decouple missing
+    def config(key: str, default: str = "", cast=None):  # type: ignore[misc]
+        value = os.environ.get(key, default)
+        return cast(value) if cast is not None and value != "" else value
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -42,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'authentication',
+    'science_search',
 ]
 
 MIDDLEWARE = [
@@ -173,3 +181,36 @@ DEFAULT_FROM_EMAIL = 'noreply@kwantuminstitute.com'
 
 # Frontend URL for password reset links
 FRONTEND_URL = 'http://localhost:3000'
+
+# ---------------------------------------------------------------------------
+# Science search middleware
+# ---------------------------------------------------------------------------
+# Gemma 4 31B Instruct via Gemini API / Google AI Studio.
+# Set GEMINI_API_KEY in the environment or a local .env file.
+GEMINI_API_KEY = config('GEMINI_API_KEY', default='')
+GEMMA_MODEL_ID = config('GEMMA_MODEL_ID', default='gemma-4-31b-it')
+SCIENCE_SEARCH_CACHE_TTL = config('SCIENCE_SEARCH_CACHE_TTL', default=86400, cast=int)
+SCIENCE_SEARCH_POLITE_EMAIL = config(
+    'SCIENCE_SEARCH_POLITE_EMAIL',
+    default='noreply@kwantuminstitute.com',
+)
+
+# Prefer Redis when REDIS_URL is set; otherwise use local memory cache.
+REDIS_URL = config('REDIS_URL', default='')
+if REDIS_URL:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': REDIS_URL,
+            'KEY_PREFIX': 'kwantum',
+            'TIMEOUT': SCIENCE_SEARCH_CACHE_TTL,
+        }
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'science-search',
+            'TIMEOUT': SCIENCE_SEARCH_CACHE_TTL,
+        }
+    }
