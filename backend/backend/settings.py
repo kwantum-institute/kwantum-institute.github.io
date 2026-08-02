@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'authentication',
     'science_search',
+    'graphrag',
 ]
 
 MIDDLEWARE = [

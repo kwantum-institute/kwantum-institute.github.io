@@ -24,6 +24,7 @@ urlpatterns = [
     path('api/auth/', include('authentication.urls')),
     path('api/', include('authentication.api_urls')),
     path('api/', include('science_search.urls')),
+    path('api/graphrag/', include('graphrag.urls')),
 ]
 
 # Serve static files during development

@@ -6,3 +6,24 @@ python-decouple==3.8
 httpx==0.28.1
 google-genai>=1.0.0
 redis>=5.0.0
+
+# GraphRAG / KAG local-first stack
+pydantic>=2.0
+pyyaml>=6.0
+numpy>=1.26
+scipy>=1.11
+faiss-cpu>=1.7.4
+torch>=2.1
+transformers>=4.40
+sentence-transformers>=3.0
+accelerate>=0.27
+safetensors>=0.4
+huggingface-hub>=0.20
+tokenizers>=0.15
+sentencepiece>=0.1.99
+einops>=0.7
+beautifulsoup4>=4.12
+lxml>=5.0
+chardet>=5.2
+pytest>=8.0
+pytest-django>=4.8

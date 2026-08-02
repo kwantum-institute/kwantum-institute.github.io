@@ -12,6 +12,8 @@ import NoPage from "./pages/NoPage";
 import Editor from "./pages/Editor";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
+import GraphRagEditor from "./components/GraphRagEditor/GraphRagEditor";
+import ArchitectureDashboard from "./components/ArchitectureDashboard/ArchitectureDashboard";
 import "./App.css";
 
 function App() {
@@ -30,6 +32,8 @@ function App() {
           />
           <Route path="nutshell/python-vs-java" element={<PythonVsJava />} />
           <Route path="editor" element={<Editor />} />
+          <Route path="graphrag" element={<GraphRagEditor />} />
+          <Route path="architecture" element={<ArchitectureDashboard />} />
           <Route path="*" element={<NoPage />} />
         </Route>
         {/* Authentication routes outside of Layout */}
