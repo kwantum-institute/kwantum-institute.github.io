@@ -1,229 +1,169 @@
-# Kwantum Institute - Authentication System
+# Kwantum Institute
 
-A comprehensive authentication system for the Kwantum Institute website, featuring Django backend with REST API and React frontend integration.
+Django + React site for the Kwantum Institute, with token auth, science search, and a local-first KAG GraphRAG editor.
 
 ## Features
 
 ### Backend (Django)
-- **User Authentication**: Login, registration, logout
-- **User Profiles**: Extended user information with bio, avatar, phone number
-- **Password Management**: Change password, reset password via email
-- **Security Features**: Login attempt tracking, token-based authentication
-- **Admin Interface**: Full Django admin integration
-- **API Endpoints**: RESTful API for frontend integration
-- **CORS Support**: Cross-origin resource sharing for frontend communication
+- **Authentication** — login, registration, logout, profile, password reset
+- **Token auth** — DRF token-based API access
+- **Science search** — optional Gemma rewrite via Gemini API
+- **GraphRAG / KAG** — editable knowledge graph, batch CSV import, Mermaid export, dual-pass Qwen research, asymmetric retrieval, privacy hook chain
+- **Env-driven security** — `SECRET_KEY`, `DEBUG`, `ALLOWED_HOSTS`, and CORS/CSRF origins are read from the environment (not hard-coded for production)
 
-### Frontend (React)
-- **Authentication Context**: Global state management for user authentication
-- **Login/Register Forms**: Modern, responsive forms with validation
-- **Profile Management**: User profile editing and management
-- **Protected Routes**: Route protection based on authentication status
-- **User Menu**: Dropdown menu with profile and logout options
-- **Responsive Design**: Mobile-friendly interface
+### Frontend (React + Vite)
+- Auth forms, profile management, protected flows
+- GraphRAG editor at `/graphrag` (nodes, edges, batch import, Mermaid preview, research)
+- Architecture dashboard at `/architecture`
+- Mermaid errors render via `textContent` (no `innerHTML` XSS sink)
 
-## Project Structure
+## Project structure
 
 ```
 .
+├── api/                         # Vercel Python WSGI adapter
 ├── backend/
-│   ├── authentication/          # Django authentication app
-│   │   ├── models.py           # User models (UserProfile, LoginAttempt, etc.)
-│   │   ├── views.py            # API views for authentication
-│   │   ├── serializers.py      # Data serialization
-│   │   ├── urls.py             # URL routing
-│   │   ├── admin.py            # Django admin configuration
-│   │   └── signals.py          # Signal handlers
-│   ├── backend/                # Django project settings
-│   │   ├── settings.py         # Project configuration
-│   │   ├── urls.py             # Main URL routing
-│   │   └── ...
-│   ├── manage.py               # Django management script
-│   └── requirements.txt        # Python dependencies
+│   ├── authentication/          # Auth app
+│   ├── science_search/          # Science search app
+│   ├── graphrag/                # KAG GraphRAG app + services
+│   ├── backend/settings.py      # Env-aware Django settings
+│   ├── requirements.txt
+│   └── .env.example
 ├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── AuthContext.jsx # Authentication context provider
-│   │   │   ├── LoginForm.jsx   # Login form component
-│   │   │   ├── RegisterForm.jsx # Registration form component
-│   │   │   ├── AuthForms.css   # Authentication form styles
-│   │   │   └── Navbar.jsx      # Navigation with auth integration
-│   │   ├── pages/
-│   │   │   ├── Login.jsx       # Login page
-│   │   │   ├── Profile.jsx     # Profile management page
-│   │   │   └── Profile.css     # Profile page styles
-│   │   └── App.jsx             # Main app with auth routes
-│   └── ...
-└── README.md                   # This file
+│   ├── src/components/
+│   │   ├── GraphRagEditor/      # Editor UI + API client
+│   │   └── ArchitectureDashboard/
+│   ├── package.json
+│   └── .env.example
+├── docs/fixes/                  # Incident / fix write-ups (md + html)
+├── brain.md                     # Approved facts / glossary for GraphRAG
+├── soul.md                      # Tone / policy for generated content
+├── vercel.json
+└── README.md
 ```
 
-## Setup Instructions
+## Prerequisites
 
-### Prerequisites
-- Python 3.8+
-- Node.js 16+
-- npm or yarn
+- Python 3.11+
+- Node.js 20+ (matches CI `node-version: 20`)
+- npm
 
-### Backend Setup
+## Backend setup
 
-1. **Navigate to the backend directory:**
-   ```bash
-   cd backend
-   ```
+```bash
+cd backend
+python -m venv venv
+# Windows: venv\Scripts\activate
+# macOS/Linux: source venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env   # then edit values
+python manage.py migrate
+python manage.py createsuperuser   # optional
+python manage.py runserver
+```
 
-2. **Create a virtual environment:**
-   ```bash
-   python -m venv venv
-   ```
+API base: `http://localhost:8000`
 
-3. **Activate the virtual environment:**
-   - Windows:
-     ```bash
-     venv\Scripts\activate
-     ```
-   - macOS/Linux:
-     ```bash
-     source venv/bin/activate
-     ```
+### Backend environment variables
 
-4. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+| Variable | Purpose | Notes |
+|---|---|---|
+| `DEBUG` | Debug mode | Default `true` locally; set `false` in production |
+| `SECRET_KEY` | Django secret | **Required when `DEBUG=false`** |
+| `ALLOWED_HOSTS` | Host allowlist | Comma-separated; default localhost list when unset |
+| `CORS_ALLOWED_ORIGINS` | Browser origins | Defaults to local Vite ports when `DEBUG=true`; empty in production unless set |
+| `CSRF_TRUSTED_ORIGINS` | Trusted CSRF origins | Comma-separated HTTPS origins for production |
+| `GEMINI_API_KEY` | Science search rewrite | Optional |
+| `QWEN_*` / `BGE_*` | Local LLM + embeddings | Local-first; leave remote search keys blank for offline |
 
-5. **Run database migrations:**
-   ```bash
-   python manage.py makemigrations
-   python manage.py migrate
-   ```
+See `backend/.env.example`.
 
-6. **Create a superuser (optional):**
-   ```bash
-   python manage.py createsuperuser
-   ```
+## Frontend setup
 
-7. **Start the Django development server:**
-   ```bash
-   python manage.py runserver
-   ```
+```bash
+cd frontend
+cp .env.example .env   # set VITE_GRAPHRAG_API_URL if needed
+npm ci                 # or npm install
+npm run dev
+```
 
-The backend will be available at `http://localhost:8000`
+Dev server: Vite default (`http://localhost:5173`). Build with `npm run build`.
 
-### Frontend Setup
+GraphRAG calls send `Authorization: Token <token>` when a login token is present in `localStorage`.
 
-1. **Navigate to the frontend directory:**
-   ```bash
-   cd frontend
-   ```
+## API endpoints
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+### Auth (`/api/auth/`)
+- `POST /login/`, `POST /logout/`, `POST /register/`
+- `GET /check-auth/`, `GET /user-info/`
+- `GET|PATCH /profile/`
+- `POST /password/change/`, `POST /password/reset/`, `POST /password/reset/confirm/`
 
-3. **Start the development server:**
-   ```bash
-   npm start
-   ```
+### GraphRAG (`/api/graphrag/`)
+Uses DRF `APIView` defaults (`IsAuthenticated`). Mutating routes are no longer CSRF-exempt.
 
-The frontend will be available at `http://localhost:3000`
+| Method | Path | Purpose |
+|---|---|---|
+| GET/POST | `/nodes/` | List / create nodes |
+| GET/PATCH/DELETE | `/nodes/<id>/` | Node detail |
+| GET/POST | `/edges/` | List / create edges |
+| GET/DELETE | `/edges/<id>/` | Edge detail |
+| GET | `/search/?q=` | Semantic chunk search (BGE) |
+| POST | `/batch/` | CSV/JSON batch import (`dry_run` supported) |
+| GET | `/mermaid/` | Mermaid + Markdown export |
+| GET/POST | `/provenance/` | Provenance list / create |
+| POST | `/research/` | KAG research cycle |
+| GET | `/architecture/` | Architecture Mermaid + principles |
+| POST | `/tune/` | Manual fine-tuning pass |
 
-## API Endpoints
+## GraphRAG usage
 
-### Authentication Endpoints
-- `POST /api/auth/login/` - User login
-- `POST /api/auth/logout/` - User logout
-- `POST /api/auth/register/` - User registration
-- `GET /api/auth/check-auth/` - Check authentication status
-- `GET /api/auth/user-info/` - Get current user information
+1. Sign in at `/login` so the editor can authenticate API calls.
+2. Open `/graphrag` to edit nodes/edges, run batch import, preview Mermaid, or run research.
+3. Open `/architecture` for the hook-chain diagram and tuning controls.
+4. Edit `brain.md` / `soul.md` at the repo root for approved context and tone (read by the research path).
 
-### Profile Management
-- `GET /api/auth/profile/` - Get user profile
-- `PATCH /api/auth/profile/` - Update user profile
+Local-first stack: `BAAI/bge-small-en-v1.5` embeddings + `Qwen3-4B-Instruct-2507` orchestration. Remote Brave / Perplexity / Consensus clients stay inactive unless API keys are set.
 
-### Password Management
-- `POST /api/auth/password/change/` - Change password
-- `POST /api/auth/password/reset/` - Request password reset
-- `POST /api/auth/password/reset/confirm/` - Confirm password reset
+## Security notes
 
-## Usage
+- **Production settings** — set `DEBUG=false`, a strong `SECRET_KEY`, and explicit `ALLOWED_HOSTS`. Django raises if `SECRET_KEY` is missing when debug is off.
+- **CORS** — prefer same-origin in production; set `CORS_ALLOWED_ORIGINS` only for known frontend origins. Do not rely on edge `Access-Control-Allow-Origin: *` for mutating APIs.
+- **GraphRAG auth** — GraphRAG views use DRF auth/permissions; frontend attaches the stored auth token.
+- **Mermaid preview** — parse/render errors use `textContent`, not `innerHTML`, so diagram text echoed in errors cannot inject HTML.
 
-### User Registration
-1. Navigate to `/login` and click "Sign up"
-2. Fill in the registration form with your details
-3. Submit the form to create your account
-4. You'll be automatically logged in after successful registration
+## CI / deploy
 
-### User Login
-1. Navigate to `/login`
-2. Enter your username and password
-3. Click "Sign In" to access your account
+- GitHub Actions Deploy workflow (`.github/workflows/deploy.yml`) runs `npm ci` then `npm run build` in `frontend/` on pushes to `master`.
+- Keep `frontend/package-lock.json` in sync whenever `package.json` changes (`npm ci` will fail on drift).
+- Vercel: `vercel.json` builds the Vite frontend and rewrites `/api/*` to `api/index.py`.
 
-### Profile Management
-1. Click on your user avatar in the navigation bar
-2. Select "Profile Settings"
-3. Edit your profile information, change password, or manage account settings
+Lockfile incident write-up: [`docs/fixes/lockfile-ci-fix.md`](docs/fixes/lockfile-ci-fix.md) (HTML: [`docs/fixes/lockfile-ci-fix.html`](docs/fixes/lockfile-ci-fix.html)).
 
-### Logout
-1. Click on your user avatar in the navigation bar
-2. Select "Sign Out" from the dropdown menu
+## Tests
 
-## Security Features
-
-- **Password Validation**: Strong password requirements
-- **Login Attempt Tracking**: Monitor failed login attempts
-- **Token-based Authentication**: Secure API access
-- **CORS Protection**: Configured for secure cross-origin requests
-- **Session Management**: Secure session handling
-- **Password Reset**: Email-based password reset functionality
-
-## Development
-
-### Adding New Features
-1. **Backend**: Add new models, views, and serializers in the `authentication` app
-2. **Frontend**: Create new components and integrate with the AuthContext
-3. **Testing**: Add tests for new functionality
-
-### Customization
-- **Styling**: Modify CSS files in the frontend for custom styling
-- **Validation**: Update form validation in both frontend and backend
-- **Email Templates**: Customize password reset email templates
-- **Admin Interface**: Extend Django admin for additional functionality
+```bash
+cd backend
+pytest
+```
 
 ## Troubleshooting
 
-### Common Issues
-
-1. **CORS Errors**: Ensure the backend CORS settings include your frontend URL
-2. **Database Errors**: Run migrations if you encounter database-related errors
-3. **Authentication Issues**: Check that tokens are being properly stored and sent
-4. **Email Issues**: Configure email settings in Django for password reset functionality
-
-### Debug Mode
-- Backend: Set `DEBUG = True` in `settings.py` for detailed error messages
-- Frontend: Check browser console for JavaScript errors
-
-## Production Deployment
-
-### Backend
-1. Set `DEBUG = False` in production settings
-2. Configure a production database (PostgreSQL recommended)
-3. Set up proper email configuration
-4. Use environment variables for sensitive settings
-5. Configure static file serving
-
-### Frontend
-1. Build the production version: `npm run build`
-2. Serve static files from a web server
-3. Configure environment variables for API endpoints
+| Symptom | Check |
+|---|---|
+| CORS errors | `CORS_ALLOWED_ORIGINS` includes your frontend origin |
+| `ImproperlyConfigured: SECRET_KEY` | Set `SECRET_KEY` when `DEBUG=false` |
+| GraphRAG 401/403 | Log in; confirm `Authorization: Token …` is sent |
+| `npm ci` missing packages | Regenerate and commit `frontend/package-lock.json` |
+| Heavy ML imports fail on Vercel | Full torch/transformers stack is for a dedicated host; serverless uses the lighter `api/requirements.txt` path |
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Submit a pull request
+1. Fork and branch from `master`
+2. Keep lockfiles / migrations updated with dependency or model changes
+3. Add tests for new GraphRAG or auth behavior
+4. Open a PR
 
 ## License
 
-This project is part of the Kwantum Institute website. Please refer to the main project license for usage terms.
+Part of the Kwantum Institute website. Refer to the project license for usage terms.
