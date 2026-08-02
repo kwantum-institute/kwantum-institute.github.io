@@ -1,38 +1,27 @@
 {
-  "version": 2,
-  "buildCommand": "npm run build",
-  "outputDirectory": "frontend/dist",
-  "framework": "vite",
-  "installCommand": "npm install",
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "frontend": {
+      "root": "frontend/",
+      "framework": "vite",
+      "installCommand": "npm ci",
+      "buildCommand": "npm run build"
+    },
+    "backend": {
+      "root": "backend/",
+      "framework": "django",
+      "entrypoint": "backend.wsgi:application",
+      "installCommand": "pip install -r requirements-vercel.txt"
+    }
+  },
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api/index.py"
-    }
-  ],
-  "headers": [
+      "destination": { "service": "backend" }
+    },
     {
-      "source": "/api/(.*)",
-      "headers": [
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        },
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "GET, POST, PATCH, DELETE, OPTIONS"
-        },
-        {
-          "key": "Access-Control-Allow-Headers",
-          "value": "Content-Type, Authorization"
-        }
-      ]
+      "source": "/(.*)",
+      "destination": { "service": "frontend" }
     }
-  ],
-  "env": {
-    "DJANGO_SETTINGS_MODULE": "backend.settings",
-    "SECRET_KEY": "@django-secret-key",
-    "DEBUG": "False",
-    "ALLOWED_HOSTS": "*"
-  }
+  ]
 }

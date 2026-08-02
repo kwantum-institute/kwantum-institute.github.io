@@ -43,3 +43,4 @@ db.sqlite3
 # Archives / local junk
 *.zip
 output.txt
+.vercel
