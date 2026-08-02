@@ -1,0 +1,40 @@
+/* Target the main Quill container */
+.quill {
+}
+
+.article-title {
+  border-radius: 8px 8px 0 0;
+}
+
+/* Target the Quill toolbar */
+.quill .ql-toolbar {
+  width: 100%;
+  background-color: #d1d5db;
+  border-style: none;
+}
+
+/* Target the Quill editor container */
+.quill .ql-container {
+  border-radius: 0 0 8px 8px; /* Adjust the value to your desired border radius */
+  border-color: #d1d5db;
+  font-size: 16px;
+  font-family: Helvetica;
+  min-height: 100px;
+}
+
+.quill .ql-editor h1 {
+  font-weight: 700;
+  font-size: 72px;
+}
+
+.quill .ql-editor h2 {
+  font-weight: 700;
+  font-size: 30px;
+}
+
+.custom-select-arrow {
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1.5em 1.5em;
+}

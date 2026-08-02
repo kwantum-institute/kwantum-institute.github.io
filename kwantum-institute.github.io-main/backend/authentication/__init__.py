@@ -1,1 +1,0 @@
-# Authentication app for Kwantum Institute 
