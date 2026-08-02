@@ -1,0 +1,46 @@
+{
+  "config": {
+    "learning_rate": 0.01,
+    "grad_clip": 1.0,
+    "epochs": 1,
+    "hidden_dims": [
+      16,
+      8
+    ],
+    "checkpoint_dir": "checkpoints",
+    "seed": 42,
+    "loss_family": "cross_entropy",
+    "input_schema": [
+      "privacy_spectrum",
+      "utility_preference",
+      "data_sensitivity"
+    ],
+    "output_targets": [
+      "LOCAL",
+      "HYBRID",
+      "CLOUD"
+    ]
+  },
+  "weights": [
+    [
+      0.028009275130512167,
+      -0.09480026555026232,
+      -0.04487022088724072
+    ],
+    [
+      -0.05936288228096995,
+      0.05103874209331967,
+      0.03133486757384778
+    ],
+    [
+      0.08231702801276816,
+      -0.08655431613983827,
+      -0.011734521591146845
+    ]
+  ],
+  "biases": [
+    0.00032149884413973373,
+    -0.0002605306502173046,
+    -6.0968193922429116e-05
+  ]
+}
