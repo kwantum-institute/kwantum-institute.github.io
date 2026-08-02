@@ -2,12 +2,21 @@ const API_BASE = import.meta.env.VITE_GRAPHRAG_API_URL || "http://localhost:8000
 
 async function apiFetch(path, options = {}) {
   const url = `${API_BASE}${path}`;
+  const token = localStorage.getItem("token");
   const defaults = {
     headers: {
       "Content-Type": "application/json",
+      ...(token ? { Authorization: `Token ${token}` } : {}),
     },
   };
-  const response = await fetch(url, { ...defaults, ...options });
+  const response = await fetch(url, {
+    ...defaults,
+    ...options,
+    headers: {
+      ...defaults.headers,
+      ...options.headers,
+    },
+  });
   if (!response.ok) {
     const text = await response.text();
     throw new Error(`API error ${response.status}: ${text}`);

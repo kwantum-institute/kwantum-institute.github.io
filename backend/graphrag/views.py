@@ -6,9 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from django.http import JsonResponse
-from django.views import View
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework.views import APIView
 
 from .models import Chunk, GraphEdge, GraphNode, ProvenanceEntry
 from .serializers import (
@@ -50,14 +48,13 @@ def _json_error(message: str, status: int = 400) -> JsonResponse:
     return JsonResponse({"error": message}, status=status)
 
 
-class NodeListView(View):
+class NodeListView(APIView):
     """List all graph nodes or create a new one."""
 
     def get(self, _request: Any) -> JsonResponse:
         nodes = list(GraphNode.objects.values())
         return JsonResponse({"nodes": nodes})
 
-    @method_decorator(csrf_exempt)
     def post(self, request: Any) -> JsonResponse:
         try:
             data = json.loads(request.body)
@@ -82,7 +79,7 @@ class NodeListView(View):
         return JsonResponse({"node": {"id": node.id, "label": node.label}})
 
 
-class NodeDetailView(View):
+class NodeDetailView(APIView):
     """Retrieve, update, or delete a single graph node."""
 
     def get(self, _request: Any, pk: str) -> JsonResponse:
@@ -92,7 +89,6 @@ class NodeDetailView(View):
             return _json_error("Node not found", 404)
         return JsonResponse({"node": node})
 
-    @method_decorator(csrf_exempt)
     def patch(self, request: Any, pk: str) -> JsonResponse:
         try:
             data = json.loads(request.body)
@@ -113,13 +109,12 @@ class NodeDetailView(View):
         )
         return JsonResponse({"updated": pk})
 
-    @method_decorator(csrf_exempt)
     def delete(self, _request: Any, pk: str) -> JsonResponse:
         GraphNode.objects.filter(pk=pk).delete()
         return JsonResponse({"deleted": pk})
 
 
-class EdgeListView(View):
+class EdgeListView(APIView):
     """List all graph edges or create a new one."""
 
     def get(self, _request: Any) -> JsonResponse:
@@ -130,7 +125,6 @@ class EdgeListView(View):
         )
         return JsonResponse({"edges": edges})
 
-    @method_decorator(csrf_exempt)
     def post(self, request: Any) -> JsonResponse:
         try:
             data = json.loads(request.body)
@@ -162,7 +156,7 @@ class EdgeListView(View):
         return JsonResponse({"edge": {"id": edge.id, "type": edge.edge_type}})
 
 
-class EdgeDetailView(View):
+class EdgeDetailView(APIView):
     """Retrieve, update, or delete a single graph edge."""
 
     def get(self, _request: Any, pk: str) -> JsonResponse:
@@ -172,13 +166,12 @@ class EdgeDetailView(View):
             return _json_error("Edge not found", 404)
         return JsonResponse({"edge": edge})
 
-    @method_decorator(csrf_exempt)
     def delete(self, _request: Any, pk: str) -> JsonResponse:
         GraphEdge.objects.filter(pk=pk).delete()
         return JsonResponse({"deleted": pk})
 
 
-class SemanticSearchView(View):
+class SemanticSearchView(APIView):
     """Run semantic search over embedded chunks and return relevant chunks."""
 
     def get(self, request: Any) -> JsonResponse:
@@ -219,10 +212,9 @@ class SemanticSearchView(View):
         return JsonResponse({"results": results[:20]})
 
 
-class BatchImportView(View):
+class BatchImportView(APIView):
     """Import nodes and edges from CSV/JSON with dry-run support."""
 
-    @method_decorator(csrf_exempt)
     def post(self, request: Any) -> JsonResponse:
         try:
             data = json.loads(request.body)
@@ -253,7 +245,7 @@ class BatchImportView(View):
         return JsonResponse(result)
 
 
-class MermaidExportView(View):
+class MermaidExportView(APIView):
     """Export the current graph as Mermaid syntax and Markdown."""
 
     def get(self, request: Any) -> JsonResponse:
@@ -269,7 +261,7 @@ class MermaidExportView(View):
         return JsonResponse({"mermaid": mermaid, "markdown": markdown})
 
 
-class ProvenanceListView(View):
+class ProvenanceListView(APIView):
     """List provenance entries for a target node or edge."""
 
     def get(self, request: Any) -> JsonResponse:
@@ -283,7 +275,6 @@ class ProvenanceListView(View):
         entries = list(queryset.values())
         return JsonResponse({"provenance": entries})
 
-    @method_decorator(csrf_exempt)
     def post(self, request: Any) -> JsonResponse:
         try:
             data = json.loads(request.body)
@@ -307,10 +298,9 @@ class ProvenanceListView(View):
         return JsonResponse({"provenance": {"id": entry.id, "target_id": entry.target_id}})
 
 
-class ResearchView(View):
+class ResearchView(APIView):
     """Run a KAG research cycle and return accepted candidates."""
 
-    @method_decorator(csrf_exempt)
     def post(self, request: Any) -> JsonResponse:
         try:
             data = json.loads(request.body)
@@ -352,7 +342,7 @@ class ResearchView(View):
         return JsonResponse(result)
 
 
-class ArchitectureView(View):
+class ArchitectureView(APIView):
     """Return the architecture-skill Mermaid diagram and explanation."""
 
     def get(self, _request: Any) -> JsonResponse:
@@ -371,10 +361,9 @@ class ArchitectureView(View):
         )
 
 
-class TuneView(View):
+class TuneView(APIView):
     """Run a manual fine-tuning baseline or training pass."""
 
-    @method_decorator(csrf_exempt)
     def post(self, request: Any) -> JsonResponse:
         try:
             data = json.loads(request.body)
