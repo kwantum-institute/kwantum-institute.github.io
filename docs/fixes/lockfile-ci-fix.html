@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frontend Lockfile Fix for CI (npm ci)</title>
+<style>
+  :root{--bg:#0d1117;--fg:#e6edf3;--muted:#8b949e;--accent:#58a6ff;--border:#30363d;--card:#161b22;--code-bg:#1f242b;--warn:#f0b429;--ok:#3fb950;--err:#f85149;}
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;line-height:1.6;font-size:16px;padding:0 16px 80px;}
+  .wrap{max-width:920px;margin:0 auto;}
+  header{border-bottom:1px solid var(--border);padding:28px 0 20px;margin-bottom:24px;}
+  header h1{margin:0 0 8px;font-size:28px;}
+  header .subtitle{color:var(--muted);margin:0;}
+  .meta{display:grid;grid-template-columns:max-content 1fr;gap:6px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:20px 0 28px;font-size:14px;}
+  .meta dt{color:var(--muted);font-weight:600;} .meta dd{margin:0;}
+  a{color:var(--accent);text-decoration:none;} a:hover{text-decoration:underline;}
+  .badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600;}
+  .badge.blocker{background:rgba(248,81,73,.15);color:var(--err);border:1px solid rgba(248,81,73,.4);}
+  .badge.resolved{background:rgba(63,185,80,.15);color:var(--ok);border:1px solid rgba(63,185,80,.4);}
+  h2{font-size:20px;margin:36px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+  h3{font-size:16px;margin:24px 0 8px;color:var(--accent);}
+  p{margin:12px 0;}
+  code{background:var(--code-bg);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:Consolas,Menlo,monospace;font-size:13px;color:#f0f6fc;}
+  pre{background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:14px 16px;overflow-x:auto;font-family:Consolas,Menlo,monospace;font-size:13px;line-height:1.5;}
+  pre code{background:none;border:none;padding:0;color:#f0f6fc;}
+  table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14px;display:block;overflow-x:auto;}
+  th,td{border:1px solid var(--border);padding:8px 12px;text-align:left;vertical-align:top;}
+  th{background:var(--card);color:var(--accent);font-weight:600;}
+  tr:nth-child(2n) td{background:rgba(255,255,255,.02);}
+  ul,ol{margin:12px 0 12px 22px;padding:0;} li{margin:4px 0;}
+  blockquote{margin:12px 0;padding:10px 16px;border-left:3px solid var(--warn);background:rgba(240,180,41,.08);border-radius:0 6px 6px 0;color:#e3b341;}
+  .footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--border);color:var(--muted);font-size:13px;}
+  @media (max-width:640px){.meta{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Frontend Lockfile Fix for CI (<code>npm ci</code>)</h1>
+  <p class="subtitle">kwantum-institute / kwantum-institute.github.io &middot; Documentation of changes made on 2026-08-03</p>
+</header>
+
+<dl class="meta">
+  <dt>Date</dt><dd>2026-08-03</dd>
+  <dt>Author</dt><dd>Adrian (Software Engineer)</dd>
+  <dt>Related PR</dt><dd><a href="https://github.com/kwantum-institute/kwantum-institute.github.io/pull/11">#11 &mdash; Fix frontend lockfile for CI (npm ci)</a></dd>
+  <dt>Related Issue</dt><dd>Created by this documentation pass (linked in PR #11)</dd>
+  <dt>Branch</dt><dd><code>fix/lockfile-ci</code> &rarr; merged into <code>master</code> at <code>ce5179f</code></dd>
+  <dt>Severity</dt><dd><span class="badge blocker">Blocker</span> &mdash; CI failed before the build step</dd>
+  <dt>Status</dt><dd><span class="badge resolved">Resolved</span></dd>
+</dl>
+
+<h2 id="summary">1. Summary</h2>
+<p>The GitHub Actions <strong>Deploy</strong> workflow failed at the <code>Install dependencies</code> step immediately after merging <a href="https://github.com/kwantum-institute/kwantum-institute.github.io/pull/10">PR #10</a> (the KAG GraphRAG editor feature). The failure was caused by <code>npm ci</code> detecting that <code>frontend/package-lock.json</code> was out of sync with <code>frontend/package.json</code>, because the <code>mermaid</code> dependency added in PR #10 was never accompanied by a regenerated lockfile.</p>
+<p>This document records the root cause, the minimal repair, the verification steps, and the follow-up recommendations. It is published via GitHub's native tracking features (an Issue and a Pull Request) and committed to the repository as both Markdown and a self-contained HTML rendering.</p>
+
+<h2 id="symptoms">2. Symptoms</h2>
+<p>The failing job: <a href="https://github.com/kwantum-institute/kwantum-institute.github.io/actions/runs/30752010653/job/91507589957">Deploy run #30752010653, job 91507589957</a>.</p>
+<p>The <code>Install dependencies</code> step emitted repeated lines of the form:</p>
+<pre><code>npm error Missing: d3-transition@3.0.1 from lock file
+npm error Missing: d3-zoom@3.0.1 from lock file
+npm error Missing: internmap@2.0.3 from lock file
+...
+npm error Usage: npm ci</code></pre>
+<p>followed by <code>Process completed with exit code 1</code>. The build step never started, which confirms the failure was dependency-metadata state, not application source.</p>
+<p>A secondary warning was also emitted by the runner:</p>
+<blockquote>Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: <code>actions/checkout@v4</code>, <code>actions/setup-node@v4</code>.</blockquote>
+
+<h2 id="root-cause">3. Root Cause</h2>
+<p><code>npm ci</code> performs a <strong>clean, strict</strong> install directly from <code>package-lock.json</code>. Unlike <code>npm install</code>, it will <strong>not</strong> rewrite the lockfile when <code>package.json</code> and the lockfile disagree &mdash; it errors out instead. This is by design: <code>npm ci</code> is meant for reproducible CI builds.</p>
+<p>PR #10 added <code>mermaid</code> to <code>frontend/package.json</code> (required by the new <code>MermaidPreview.jsx</code> component for rendering graph diagrams), but the corresponding <code>frontend/package-lock.json</code> was committed unchanged. As a result, <code>npm ci</code> could not resolve <code>mermaid</code>'s transitive dependency tree (<code>d3-transition</code>, <code>d3-zoom</code>, <code>internmap</code>, <code>d3-array</code>, <code>d3-delaunay</code>, &hellip;) and aborted before the Vite build could run.</p>
+
+<h2 id="workflow-context">4. Workflow Context</h2>
+<p>Relevant excerpt from <code>.github/workflows/deploy.yml</code>:</p>
+<pre><code>- name: Setup Node
+  uses: actions/setup-node@v4
+  with:
+    node-version: 20
+    cache: npm
+    cache-dependency-path: frontend/package-lock.json
+
+- name: Install dependencies
+  run: npm ci
+  working-directory: frontend
+
+- name: Build project
+  run: npm run build
+  working-directory: frontend</code></pre>
+<p>Key points:</p>
+<ul>
+  <li><code>npm ci</code> is used (strict mode) &mdash; correct for CI.</li>
+  <li><code>node-version: 20</code> is pinned &mdash; the lockfile must be generated with a compatible Node major to avoid format drift.</li>
+  <li><code>cache-dependency-path: frontend/package-lock.json</code> &mdash; the cache key depends on the lockfile, so a stale lockfile also degrades cache hits.</li>
+</ul>
+
+<h2 id="fix">5. Fix</h2>
+<p>The minimal repair is to regenerate <code>frontend/package-lock.json</code> and commit it. No source code was changed.</p>
+<p>Steps performed locally:</p>
+<pre><code># Use Node 20.x to match the workflow's pinned node-version.
+$env:PATH = "$env:USERPROFILE\node-port\node-v20.18.1-win-x64;$env:PATH"
+Set-Location frontend
+npm install --no-audit --no-fund   # rewrites package-lock.json
+npm run build                       # verify the build still succeeds</code></pre>
+<p>Resulting commit (merged via PR #11):</p>
+<pre><code>7d8b3bf Fix frontend lockfile for CI
+ frontend/package-lock.json | +2583 / -1276</code></pre>
+
+<h2 id="verification">6. Verification</h2>
+<ol>
+  <li><strong>Lockfile integrity</strong> &mdash; <code>frontend/package-lock.json</code> now contains the previously missing packages: <code>node_modules/mermaid</code>, <code>node_modules/d3-transition</code>, <code>node_modules/d3-zoom</code>, <code>node_modules/internmap</code>, with <code>lockfileVersion: 3</code>.</li>
+  <li><strong>Local build</strong> &mdash; <code>npm run build</code> completed successfully in 15.92s, producing <code>dist/</code> with all assets. Only non-fatal warnings were emitted (chunk-size &gt; 500&nbsp;kB advisories for <code>flowchart-elk-definition</code>, <code>mindmap-definition</code>, and <code>index</code>).</li>
+  <li><strong>CI</strong> &mdash; after PR #11 merged, the Deploy workflow advanced past the <code>Install dependencies</code> step.</li>
+</ol>
+
+<h2 id="files-changed">7. Files Changed</h2>
+<table>
+  <thead><tr><th>File</th><th>Change</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>frontend/package-lock.json</code></td><td>+2583 / &minus;1276</td><td>Regenerated to include <code>mermaid</code> and its transitive deps</td></tr>
+  </tbody>
+</table>
+<p>No other files were modified. This is purely dependency metadata.</p>
+
+<h2 id="follow-up">8. Follow-up Recommendations</h2>
+<p>These are <strong>not</strong> part of the minimal fix but are recommended to prevent recurrence:</p>
+<ol>
+  <li><strong>Regenerate the lockfile whenever <code>package.json</code> changes.</strong> Add a CI guard:
+    <pre><code>- name: Verify lockfile is up to date
+  run: |
+    npm install --package-lock-only --no-audit --no-fund
+    git diff --exit-code -- frontend/package-lock.json
+  working-directory: frontend</code></pre>
+    This fails the job if the committed lockfile drifts from <code>package.json</code>.
+  </li>
+  <li><strong>Bump the Node version.</strong> <code>node-version: 20</code> is deprecated on GitHub Actions runners. Move to <code>22</code> (or <code>24</code>) and update <code>actions/checkout@v4</code> and <code>actions/setup-node@v4</code> to their latest majors to clear the deprecation warning. Regenerate the lockfile with the same Node version you pin.</li>
+  <li><strong>Code-split the mermaid bundle.</strong> The build emits chunk-size warnings because <code>mermaid</code> pulls in large diagram-specific chunks. Consider dynamic <code>import()</code> for diagram types you don't use, or <code>build.rollupOptions.output.manualChunks</code> to split them. This is a perf improvement only; it does not affect correctness.</li>
+  <li><strong>Adopt Renovate / Dependabot</strong> to keep <code>frontend/package-lock.json</code> and <code>backend/requirements.txt</code> in sync automatically, so manual edits to <code>package.json</code> are less likely to land without a lockfile update.</li>
+</ol>
+
+<h2 id="reproduction">9. Reproduction</h2>
+<p>To reproduce the original failure locally:</p>
+<pre><code>git checkout 63fb970   # master before PR #11 merged
+Set-Location frontend
+npm ci                 # fails: Missing: d3-transition ... from lock file</code></pre>
+<p>To confirm the fix:</p>
+<pre><code>git checkout ce5179f   # master after PR #11 merged
+Set-Location frontend
+npm ci                 # succeeds
+npm run build           # succeeds</code></pre>
+
+<h2 id="glossary">10. Glossary</h2>
+<ul>
+  <li><strong><code>npm ci</code></strong> &mdash; Clean-install command. Installs exactly what <code>package-lock.json</code> records; errors instead of mutating the lockfile if it disagrees with <code>package.json</code>.</li>
+  <li><strong><code>package-lock.json</code></strong> &mdash; Deterministic record of every installed package and its transitive dependencies, including integrity hashes.</li>
+  <li><strong><code>lockfileVersion</code></strong> &mdash; Schema version of the lockfile. Version 3 is current for npm 7+.</li>
+  <li><strong>Transitive dependency</strong> &mdash; A dependency required by one of your direct dependencies, not listed explicitly in <code>package.json</code>.</li>
+</ul>
+
+<div class="footer">
+  <p>Self-contained HTML rendering of <code>docs/fixes/lockfile-ci-fix.md</code>. Open this file directly in any browser; no external resources are loaded. Generated 2026-08-03.</p>
+</div>
+
+</div>
+</body>
+</html>
